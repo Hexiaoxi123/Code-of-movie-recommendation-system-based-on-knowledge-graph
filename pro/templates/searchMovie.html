@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load  static %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block main-content %}
+    <!-------------------------- 搜索框 ------------------------------->
+    <div class="search-box">
+        <form method="post" action="{% url 'search_movie' %}">
+        <div class="row">
+            <div class="col col-lg-9">
+                <div class="input-group input-group-lg">
+                    <input type="text" name="search" class="form-control" placeholder="搜索电影、演员、导演...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="submit">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        </form>
+
+    </div>
+     <!------------------------------ 搜索结果--------------------------->
+    <div class="search-result">
+        {% if movies %}
+            <!---------------- 展示搜索结果------------------------->
+            <div class="search-result-lists">
+
+                {% for row in movies %}
+                    <div class="result-list">
+                        <div class="result-list-left">
+                            <img src="{% static 'images/' %}{{ row.image_link | safe }}" height="200" >
+                        </div>
+                        <div class="result-list-right">
+                            <p class="title">{{ row.name }}</p>
+                            <ul>
+                                <li><span>导演：</span>{{ row.director }}</li>
+                                <li><span>主演：</span>{{ row.leader| slice:'30' }}...</li>
+                                <li><span>地区：</span>{{ row.country }}</li>
+                                <li><span>上映日期：</span>{{ row.years | safe }}</li>
+                                <li><span>简介：</span>{{ row.intro | slice:'100' }}...
+                                    <a href="{% url 'detail' row.id %}">点击查看详情</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+        {% else %}
+
+            <!---------------- 如果搜索结果为空------------------------->
+            <div class="search-result-fault {{ state }}">
+                <img src="{% static 'images/search-non.png' %}">
+                <p class="fault-them">搜索失败</p>
+                <p class="fault-tip">没有找到关于“{{ title }}”的电影，换个关键词试试吧。</p>
+            </div>
+
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+         $('.menu ul').find('li').eq(3).addClass('active');
+    </script>
+{% endblock %}

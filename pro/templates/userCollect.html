@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+        .main-content {}
+
+        .location {padding-left: 10px;margin-bottom: 16px;}
+        .per-info ul li {background: #ebebeb;height: 46px;line-height: 46px;text-align: center;margin-bottom: 5px;font-size: 16px;}
+        .per-info ul li.on {background: #427FD0;}
+        .per-info ul li.on a {color: #fff;}
+        .per-info ul li a {color: #333333;text-decoration: none;}
+        .per-content {background: #ebebeb;height: 600px;padding: 20px;overflow-y: auto;}
+
+
+    </style>
+{% endblock %}
+
+
+{% block main-content %}
+    <div class="container">
+        <div class="location">个人中心</div>
+        <div class="row per-info">
+            <div class="col col-lg-2">
+                <ul>
+                    <li><a href="{% url 'user_info' %}">信息管理</a></li>
+                    <li><a href="{% url 'user_comment' %}">我的评论</a></li>
+                    <li  class="on"><a href="{% url 'user_collect' %}">我的收藏</a></li>
+{#                    <li><a href="{% url 'user_history' %}">观看历史</a></li>#}
+                </ul>
+            </div>
+            <div class="col col-lg-10 per-content">
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th width="200px;">电影名</th>
+                        <th>电影导演</th>
+                        <th>上映时间</th>
+                        <th>地区</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for row in obj_info %}
+                        <tr>
+                            <td>{{ row.name }}</td>
+                            <td>{{ row.director }}</td>
+                            <td>{{ row.years |  date:'Y-m-d'}}</td>
+                            <td>{{ row.country  }}</td>
+                            <td>
+                                <a onclick="delObj({{ row.id }});" title="删除记录">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+
+        // 删除记录
+        function delObj(id) {
+
+            $.ajax({
+                url: '/user/collect/',
+                type: 'POST',
+                data: {'id': id},
+                success: function (data) {
+                    //当服务端处理完成后，返回数据时，该函数自动调用
+                    //data=服务端返回的值
+                    if (data == "ok") {
+                        alert("删除成功！");
+                        location.reload();//刷新当前页面
+                    } else {
+                        alert("操作失败！");
+                    }
+
+                }
+            })
+        }
+
+
+    </script>
+{% endblock %}

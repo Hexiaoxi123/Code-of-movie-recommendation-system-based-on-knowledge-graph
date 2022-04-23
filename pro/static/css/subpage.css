@@ -1,0 +1,42 @@
+/* ----------------------- 分类浏览 ------------------------- */
+/* ---------------------------------------------------------- */
+.tags_header{width:1000px; height:250px; margin:5px auto 50px auto; border:1px #e0e0e0 solid;padding-top: 18px;}
+.tags_header p{float:left; font-size:18px;background-color: #31b0d5;color:#fff;padding: 3px 5px;}
+
+.tags_top{width:1000px; height:90px; margin-top:20px; margin-left:20px;}
+.tags_top_right{width:900px; height:90px; float:left;  }
+.tags_top_right ul{list-style:none; margin-top:5px;}
+.tags_top_right ul li{float:left; width:80px; text-align:center; height:27px; font-size:16px;}
+.tags_top_right ul a{text-decoration:none; color:#333;}
+.tags_top_right ul a:hover,.tags_top_right ul a.on{color:#fff;background: #FD8A08;padding: 3px 6px;border-radius: 5px;}
+
+/* ----------------------- 最新上映 ------------------------- */
+/* ---------------------------------------------------------- */
+.new-title{ width: 1033px; margin: 0 auto 50px auto;text-align: center;padding-left: 300px;}
+.new-title ul{}
+.new-title ul li{float: left;width: 200px;}
+.new-title ul li a{ font-size: 20px;font-family: 微软雅黑;font-weight: bold;color: #888888;}
+.new-title ul li a.on1{color: #427FD0;}
+.new-title ul li a:hover{text-decoration: none;}
+
+
+
+/* ----------------------- 影片搜索 ------------------------- */
+/* ---------------------------------------------------------- */
+.search-box{width: 1033px;background-color: #ffffff;margin: 0 auto;padding: 20px 100px;}
+.search-result{width: 1033px;background-color: #ffffff;margin: 10px auto 100px auto;}
+
+.search-result-fault{text-align: center; padding: 50px 0;}
+.search-result-fault img{ width: 150px;height: 150px;}
+.search-result-fault p.fault-them{ font-weight: bold;font-size: 26px;line-height: 60px;font-family: 微软雅黑;}
+.search-result-fault p.fault-tip{ font-size: 16px;font-family: 微软雅黑;}
+
+.search-result-lists{ width: 100%;padding: 30px;}
+.result-list{width: 900px;height: 230px;margin: 10px auto 20px auto;border-bottom: 1px dotted #d5d5d5;}
+.result-list-left{float: left;width: 220px;}
+.result-list-right{float: left;width: 670px;}
+.result-list-right>p.title{ font-size: 20px;font-weight: bold;color: #427FD0;}
+.result-list-right li{font-size: 16px;line-height: 26px;}
+.result-list-right li span{ font-weight: bold;}
+/* ----------------------- 电影推荐 ------------------------- */
+/* ---------------------------------------------------------- */

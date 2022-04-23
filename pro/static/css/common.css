@@ -1,0 +1,44 @@
+.clear { clear: both;  }
+body{height: 100%;}
+ul, ol {list-style: none outside;padding: 0;}
+.navbar-brand{ padding:15px 1px 15px 30px;}
+.content { width: 100%;position: absolute;
+    top: 50px;bottom: 0;left: 0;}
+.navbar-text a{color: #9d9d9d;}
+.navbar-text a:hover{color: #fff;text-decoration: none;}
+        /* ------------------ 左侧菜单栏------------------------ */
+        .sidebar-wrap {float: left;width: 189px;height: 100%;background: #f2f2f2;border-right: 1px solid #ccc;
+    /* cursor: e-resize; */
+}
+.sidebar-title {height: 44px;text-indent: 1em;text-align: left;
+/*background: #36D1DC;  !* fallback for old browsers *!*/
+/*background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);  !* Chrome 10-25, Safari 5.1-6 *!*/
+/*background: linear-gradient(to right, #5B86E5, #36D1DC); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+background: #667db6;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+.sidebar-title h1{font-size: 14px;line-height: 44px;margin-top: 0;text-align: center;margin-bottom: 0;color: #ffffff;}
+.sidebar-content {padding-top: 5px;}
+.sidebar-list li {border: 1px solid #e5e5e5;border-width: 1px 0;}
+.sidebar-list li a {padding: 0 16px 0 20px;display: block;height: 38px;line-height: 38px;color: #333;}
+.sidebar-list li .icon-font {margin-right: 5px;color: #888;font-size: 14px;}
+.icon-font {font-family: 'icomoon';speak: none;font-weight: 400;font-style: normal;font-variant: normal;
+    text-transform: none;line-height: 1;-webkit-font-smoothing: antialiased;}
+.sub-menu {border-top: 1px solid #e5e5e5;background: #fff;}
+.sub-menu li {padding-left: 21px;}
+.sub-menu li.on{background: #667db6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.sub-menu li.on a{ color: #fff;}
+.sub-menu li.on span{ color: #fff;}
+.sidebar-list li a {padding: 0 16px 0 20px;display: block;height: 38px;line-height: 38px;color: #333;text-decoration: none;}
+
+/* ------------------ 右侧内容------------------------ */
+.main-wrap {margin-left: 190px;min-height: 100%;}
+.crumb-wrap {height: 40px;line-height: 39px;border-bottom: 1px solid #e5e5e5;background: #f5f5f5;}
+.crumb-list {padding-left: 12px;}
+.crumb-list .icon-font {margin-right: 5px;}

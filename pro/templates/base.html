@@ -1,0 +1,76 @@
+{% load  static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer" />  <!--可以让img标签预加载网络图片-->
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}"/><!-- 引入bootstrapCSS文件 -->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/public.css' %}"/> <!-- 引入公共部分外部样式CSS文件 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/subpage.css' %}"/> <!-- 引入子页面外部样式CSS文件 -->
+
+    {% block css %}{% endblock %}
+
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+<!----------------------- nav  --------------------------->
+<div class="nav">
+	<div class="w1200">
+		<div class="logo">
+			<a href="#">电影推荐系统</a>
+		</div>
+		<div class="menu">
+			<ul>
+				<li>
+					<h2><a href="{% url 'index' %}">首页</a></h2>
+				</li>
+				<li>
+					<h2 ><a href="{% url 'tages_movie' %}">分类浏览</a></h2>
+				</li>
+				<li>
+					<h2><a href="{% url 'new_movie' 0%}">最新上映</a></h2>
+				</li>
+				<li>
+					<h2><a href="{% url 'search_movie' %}">影片搜索</a></h2>
+				</li>
+				<li>
+					<h2><a href="{% url 'rec_movie' %}">电影推荐</a></h2>
+				</li>
+			</ul>
+		</div>
+		<div class="login">
+
+                {% if request.session.user_info.account %}
+                    <a href="{% url 'user_info' %}" title="点击进入个人中心">欢迎您，{{ request.session.user_info.account }}</a>
+                {% else %}
+                    <a href="{% url 'login' %}">您好，请登录</a>
+                {% endif %}
+			<a href="{% url 'login' %}">退出</a>
+		</div>
+        <div class="clear"></div>
+	</div>
+</div>
+
+
+<!----------------------- main-content  --------------------------->
+<div class="main-content" >
+    {% block main-content %}{% endblock %}
+
+</div>
+
+<!----------------------- footer  --------------------------->
+<div class="footer">
+    <div class="container">
+        <p> copyright©2022 电影推荐系统</p>
+    </div>
+</div>
+</body>
+</html>
+
+
+{% block js %}{% endblock %}

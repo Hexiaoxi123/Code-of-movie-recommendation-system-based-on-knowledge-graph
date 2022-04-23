@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+
+    /* --------------- comment_body 评论区 ------------------- */
+    .comment_body{ margin: 20px 0;background: #fafafa;padding: 10px;}
+    .comment_list{border-bottom: 1px solid #dddddd;padding:3px 10px;margin-bottom: 20px;}
+    .com_user{font-size: 18px;color: #333333;font-weight: bold;margin-bottom: 0;}
+    .com_time{color: #737373;}
+    .com_content{font-size: 16px;text-indent: 20px;}
+
+
+
+    </style>
+{% endblock %}
+
+
+{% block main-content %}
+
+<div class="main-movies">
+    <!------------------- 评论区 ------------------>
+    <div class="comment_body">
+        {% for row in comment %}
+        <div class="comment_list">
+            <p class="com_user">{{ row.user__account }}</p>
+            <p class="com_time">{{ row.create_time | date:'Y-m-d H:i:s' }}</p>
+            <p class="com_content">{{ row.comment }}</p>
+        </div>
+        {% endfor %}
+    </div>
+     <!------------------------  分页 ----------------------------->
+    <div class="row" align="center" style="margin-right: 0;margin-left: 0;">
+        {% if comment.has_other_pages %}
+            <ul class="pagination bg-yellow">
+                {% if comment.has_previous %}
+                    <li><a href="?page={{ comment.previous_page_number }}">上一页</a></li>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for l in  comment.paginator.page_range %}
+                    {% if l <= comment.number|add:5 and l >= comment.number|add:-5 %}
+                        {% if comment.number == l %}
+                            <li class="active"><span>{{ l }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+{#                <li class="item"><a href="#">#}
+{#                    {{ movies.number }}/{{ movies.paginator.num_pages }}</a>#}
+{#                </li>#}
+                {% if comment.has_next %}
+                    <li><a href="?page={{ comment.next_page_number }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}

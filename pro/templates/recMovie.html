@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+        .main-content {
+            padding-top: 0;
+        }
+        .main-movies {
+            padding-top: 30px;
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block main-content %}
+    <div style="color: red;font-size: 20px;text-align: center;padding-top: 100px;">{{ msg }}</div>
+    <!---------------- 电影列表 ----------------->
+    <div class="main-movies">
+        <div class="dy-content">
+            <div class="dy-videos">
+                <ul class="dy-video-list" >
+                    {% for row in movies %}
+                        <li class="dy-video-item ">
+                            <div class="dy-video-meta">
+                                <div class="dy-video-meta-bg"></div>
+                                <div class="dy-video-meta-dy">
+                                    <h4 class="dy-video-title"><a> {{ row.name }} </a></h4>
+{#                                    <span class="dy-video-rating">{{ row.d_rate }}</span>#}
+                                    <ul class="dy-video-meta-list">
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip"> 主演: </span>
+                                            <a>{{ row.leader }}</a>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">导演:</span>
+                                            <span class="dy-video-meta-filter">{{ row.director }}</span>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">标签:</span>
+                                            <span class="dy-video-meta-filter">{{ row.label}}</span>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">地区:</span>
+                                            <span class="dy-video-meta-filter">{{ row.country }}</span>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">语言:</span>
+                                            <span class="dy-video-meta-filter">{{ row.language }}</span>
+                                        </li>
+                                    </ul>
+                                    <p class="dy-video-intro">
+                                        <!-- 详情 --->
+                                        <a class="dy-video-intro-more" href="{% url 'detail' row.id%}">点击查看详情</a>
+                                    </p>
+                                </div>
+                                <div class="dy-video-meta-bg"></div>
+                            </div>
+                            <div class="dy-video-poster">
+                                <a class="dy-video-link">
+                                    <img class="dy-video-img"  src="{% static 'images/' %}{{ row.image_link | safe }}" >
+                                    <span  class="dy-video-nocomplete"></span>
+                                    <span class="dy-video-date"> {{ row.years | safe | slice:'4'}} 年 </span>
+                                    <span class="dy-video-bg"></span>
+                                    <span class="s-pay"></span>
+                                </a>
+                            </div>
+                            <div class="dy-video-primary">
+                                <h4 class="dy-video-title">
+                                    <a> {{ row.name }} </a>
+                                </h4>
+                                <span class="dy-video-rating">
+                                    {% if row.d_rate is None %}
+                                        暂无
+                                    {% else %}
+                                    {{ row.d_rate }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+         $('.menu ul').find('li').eq(4).addClass('active');
+
+
+    </script>
+{% endblock %}

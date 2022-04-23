@@ -1,0 +1,250 @@
+{% extends 'adminLayout.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+    /*数据分析 table*/
+    .data-box{ margin: 30px auto 0 auto;width: 1263px;height: 140px;}
+    .data-left{border: 1px solid #dddddd; width: 380px;height: 100px;float: left;margin: 5px 20px;}
+    .data-left .data-icon{border: 1px solid #dddddd; width: 140px;height: 100px;padding: 25px 15px; color: #fff;
+        font-size: 50px;text-align: center;line-height: 50px;float: left;}
+    .data-left .data-value{ width: 237px;float: left;text-align: center; color: #666666;}
+    .data-left .data-value h1{font-weight: 500; font-size: 32px;}
+
+    .data-user{background: #6ccac9;}
+    .data-tags{ background: #ff6c60;}
+    .data-bar-chart{ background: #57c8f2;}
+
+      /*chart-box*/
+    .chart-box{ margin: 20px auto 0 auto;width: 1263px;height: 400px;}
+    *{margin:0; padding:0; list-style:none; }
+
+        /*  切换css */
+    .slideTxtBox{ width:100%; text-align:left;  }
+    .slideTxtBox .hd{height:30px;line-height:30px; padding:0 10px 0 20px;   position:relative; }
+    .slideTxtBox .hd ul{ float:left;  position:absolute; left:20px; top:-1px; height:32px;   }
+    .slideTxtBox .hd ul li{ float:left; padding:0 15px; cursor:pointer; background:#cccccc; border:1px solid #fff;  }
+    .slideTxtBox .hd ul li.on{ height:30px;  background:#f43d19; border:1px solid #f43d19; color: #fff;}
+    .slideTxtBox .bd ul{ margin-top: 10px;padding:15px;  zoom:1;width: 100%;height: 356px; border:1px solid #ddd; }
+    .slideTxtBox .bd li{ height:24px; line-height:24px;   }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="main-wrap">
+        <div class="crumb-wrap">
+            <div class="crumb-list">
+                <i class="icon-font"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></i>
+                <span class="crumb-name">数据统计</span>
+            </div>
+        </div>
+        <!--------------------- 搜索栏 ---------------------------->
+        <div class="data-box">
+            <div class="data-left">
+                <div class="data-icon data-user">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                </div>
+                <div class="data-value">
+                    <h1>{{ user_sum }}</h1>
+                    <p>现有注册用户数量</p>
+                </div>
+            </div>
+            <div class="data-left">
+                <div class="data-icon data-tags">
+                    <span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+                </div>
+                <div class="data-value">
+                    <h1>{{ movie_sum }}</h1>
+                    <p>影片总数量</p>
+                </div>
+            </div>
+            <div class="data-left">
+                <div class="data-icon data-bar-chart">
+                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                </div>
+                <div class="data-value">
+                    <h1>{{ tag_sum }}</h1>
+                    <p>电影种类数量</p>
+                </div>
+            </div>
+        </div>
+        <div class="chart-box">
+            <div class="slideTxtBox">
+                <div class="hd">
+                    <ul>
+                        <li>评分最高电影T10</li>
+                        <li>最受欢迎电影T10</li>
+                    </ul>
+                </div>
+                <div class="bd">
+                    <ul>
+                        <div id="rate" style="width: 1200px;height: 340px;"></div>  <!--   AQI显示   -->
+                    </ul>
+                    <ul>
+                        <div id="view" style="width: 1200px;height: 340px;"></div>
+                    </ul>
+                </div>
+            </div>
+            <script type="text/javascript">jQuery(".slideTxtBox").slide({trigger:"click"});</script>
+        </div>
+
+
+    </div>
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例  曲线图
+        var rate = echarts.init(document.getElementById('rate'));
+        var view = echarts.init(document.getElementById('view'));
+
+        initRate();
+        initView();
+
+        function initRate() {
+             var option = {
+                    title: {
+                        text: '评分最高电影（T10）',
+                        x:'300px',
+                    },
+                    // 坐标轴指示器是指示坐标轴当前刻度的工具
+                    tooltip: {
+                        trigger: 'axis',
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['line', 'bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        },
+                        x:'70%',
+                        y:'8%'
+                    },
+                    // 图例组件:展现了不同系列的标记，颜色和名字
+                    legend: {
+                        data: ['通过率'],
+                        y:'8%'
+                    },
+
+                    //  坐标系位置设置
+                    grid: {
+                        top:'24%',
+                        left: '3%',
+                        right: '4%',
+                        bottom: '15%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        name:'电影名',
+                        nameLocation: 'center',
+                        nameGap: 40,    // 坐标轴名称与轴线之间的距离。
+                        type: 'category',
+                        {#data:['试卷1','试卷2','试卷3','试卷4','试卷5','试卷6']#}
+                        data:{{ rate_x | safe }}
+
+                    },
+                    yAxis: {
+                        name: '评分',
+                        nameLocation: 'middle',
+                        nameGap: 45,
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                      }
+                    },
+                    series: [
+                        {
+                            name:'评分',
+                            type: 'bar',
+                            data: {{ rate_y | safe }}
+                        }
+                    ]}
+                // 使用刚指定的配置项和数据显示图表。
+                    rate.setOption(option);
+             }
+
+        function initView() {
+             var option = {
+                    title: {
+                        text: '最受欢迎电影（T10）',
+                        x:'300px',
+                    },
+                    // 坐标轴指示器是指示坐标轴当前刻度的工具
+                    tooltip: {
+                        trigger: 'axis',
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['line', 'bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        },
+                        x:'70%',
+                        y:'8%'
+                    },
+                    // 图例组件:展现了不同系列的标记，颜色和名字
+                    legend: {
+                        data: ['通过率'],
+                        y:'8%'
+                    },
+
+                    //  坐标系位置设置
+                    grid: {
+                        top:'24%',
+                        left: '3%',
+                        right: '4%',
+                        bottom: '15%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        name:'电影名',
+                        nameLocation: 'center',
+                        nameGap: 40,    // 坐标轴名称与轴线之间的距离。
+                        type: 'category',
+                        {#data:['试卷1','试卷2','试卷3','试卷4','试卷5','试卷6']#}
+                        data:{{ view_x | safe }}
+
+                    },
+                    yAxis: {
+                        name: '点击量',
+                        nameLocation: 'middle',
+                        nameGap: 45,
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                      }
+                    },
+                    series: [
+                        {
+                            name:'点击量',
+                            type: 'line',
+                            data: {{ view_y | safe }}
+                        }
+                    ]}
+                // 使用刚指定的配置项和数据显示图表。
+                    view.setOption(option);
+             }
+
+
+
+
+
+    </script>
+
+{% endblock %}

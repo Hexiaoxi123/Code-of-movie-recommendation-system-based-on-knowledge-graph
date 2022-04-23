@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+    .main-content{ padding-top: 0;padding-bottom: 0;}
+
+    /* ----- 遮罩层 ----- */
+    .shadow {position: fixed;top: 0;bottom: 0;left: 0;right: 0;background-color: black;opacity: 0.4;z-index: 999;}
+    .modal_layer {position: fixed;z-index: 1000;left: 50%;top: 50%;background-color: white;width: 500px;padding-top: 30px;
+        text-align: center;height: 250px;margin-top: -150px;margin-left: -200px;}
+    .modal_layer input[type='button']{padding: 3px 10px;}
+    .hide{ display: none;}
+
+    /* 重置文本格式元素 */
+    a { text-decoration: none; cursor: pointer; color:#333333; }
+    a:hover { text-decoration: none; }
+    .clearfix::after{ display:block; content:''; height:0; overflow:hidden; clear:both;}
+
+    /*星星样式*/
+    .block{ width:100%; margin:0 0 20px 0; padding-top:10px; padding-left:50px; line-height:21px;}
+    .block .star_score{ float:left;}
+    .block p{ padding-left:20px; line-height:20px; display:inline-block;}
+    .block .attitude{ padding-left:0px; line-height:2px; display:inline-block;}
+
+    .block p span{ color:#C00; font-size:16px; font-family:Georgia, "Times New Roman", Times, serif;}
+    .star_score { background:url({% static 'images/stark2.png' %}); width:160px; height:21px;  position:relative; }
+    .star_score a{ height:21px; display:block; text-indent:-999em; position:absolute;left:0;}
+    .star_score a:hover{ background:url({% static 'images/stars2.png' %});left:0;}
+    .clear{clear: both;}
+
+    .detailCon {background: #fff;position: relative;zoom: 1;min-height: 1000px;padding-bottom: 200px;}
+    .detail_bodybg {background-color: #127bab;width: 100%;height: 228px;position: absolute;
+    left: 0;top: 0;z-index: 1;}
+
+    .detail_content {position: relative;z-index: 2;min-height: 1000px;}
+    .detail_content .detail_db_shadow {width: 1225px;margin: 0 auto;position: relative;
+        z-index: 1;padding: 18px 17px 200px 13px;}
+    .detail_content .detail_db_shadow .clearfix {background: #fff;padding: 30px;}
+    .detail_content .detail_db_shadow .clearfix .left {width: 300px;}
+    .detail_content .detail_db_shadow .clearfix .right {width: calc(100% - 300px);width: -webkit-calc(100% - 300px);}
+
+    .detail_content .detail_db_shadow .clearfix .left, .detail_content .detail_db_shadow .clearfix .right {float: left;position: relative;z-index: 1;}
+    /* ---- 图片 ----- */
+    .clearfix .left .picbox {background: #f9f9fa;border: 1px solid #d5d5d5;border-radius: 10px;box-shadow: 0 0 10px #999;
+        padding: 10px;width: 276px;min-height: 300px;position: relative;z-index: 1;}
+
+    .clearfix .left .imgbox {background: #000;text-align: center;zoom: 1;width: 100%;min-height: 275px;border-radius: 6px;
+        border: 1px solid #000;overflow: hidden;position: relative;}
+
+
+    /* ---- 右边信息 ----- */
+    .right .r_head{padding: 30px 0 24px 30px;}
+    .right .r_head h2{font-size: 35px;line-height: 1.3em;font-weight: 700;}
+    .right .r_head h2 span{font-size: 20px;color: #737373;}
+    .right .r_head .otherbox {background: #444;display: inline-block;color: #fff;font-size: 16px;line-height: 26px;
+        margin-top: 15px;padding: 0 10px;border-radius: 3px;}
+    .right .r_info{padding: 30px 0 0 30px;}
+    .right .r_info .info_l{margin-left: 6px;background: white;}
+    .right .r_info .info_l dd{border-bottom: 1px dotted #999;padding: 9px 0 9px 95px;line-height: 20px;font-size: 16px;
+        position: relative;}
+    .right .r_info .info_l dd strong{position: absolute;left: 0;top: 7px;width: 95px;font-size: 14px;
+        font-weight: 700;line-height: 1.5em;}
+    .right .r_info .info_l dd a{margin-right: 10px;color: #08c;}
+    .right .r_info .info_l dt{font-size: 13px;}
+    .right .r_info .info_l h4{margin-top: 12px;font-weight: 700;}
+    .right .r_info .info_l P{font-size: 14px;text-indent: 2em;line-height: 180%;margin-top: 6px;}
+
+    /* --------------- rate_body 操作区 ------------------- */
+    .rate_body{margin-top: 50px;}
+    .rate_body .info_r{background: white;padding-top: 20px;}
+    .rate_body .info_r .gradebox{background: #679c21;width: 80px;height: 80px;color: #fff;text-align: center;
+        font-size: 12px;margin-bottom: 30px;}
+    .rate_body .info_r .gradebox b{padding:3px 0 0 0;width: 62px;height: 40px;margin: 0 auto ;text-align: left;
+        font-size: 42px;line-height: 1.2em;letter-spacing: 0;position: relative;zoom: 1;display: block;}
+    .rate_body .info_r .info_do {font-size: 14px;}
+    .rate_body .info_r .info_do button{height: 28px;font-size: 14px;line-height: 28px;border: 0;
+        border-radius: 15px;margin: 0 5px;padding: 0 25px;cursor: pointer;}
+
+    .btn-collect {background-color: #0081bc;color: #fff;}
+
+    .btn-watch {background-color: #5cb85c;color: #fff;}
+    .btn-watch a{color: #ffffff;}
+    .btn-tupu {background-color: #cc3300;color: #fff;}
+    .btn-score {background: #ffd564;color: #fff;}
+
+    /* --------------- comment_body 评论区 ------------------- */
+    .comment_body{ margin: 20px 0;background: #fafafa;padding: 10px;}
+    .comment_list{border-bottom: 1px solid #dddddd;padding:3px 10px;margin-bottom: 20px;}
+    .com_user{font-size: 18px;color: #333333;font-weight: bold;margin-bottom: 0;}
+    .com_time{color: #737373;}
+    .com_content{font-size: 16px;text-indent: 20px;}
+
+    .comment_bottom{ text-align: center;}
+
+    </style>
+{% endblock %}
+
+
+{% block main-content %}
+
+    <!---详情页内容 -->
+<div class="detailCon">
+    <div class="detail_bodybg"></div>
+    <div style="min-height:35px;"></div>
+    <div class="detail_content">
+        <div class="detail_db_shadow">
+            <div class="clearfix">
+                <!-- left start -->
+                <div class="left">
+                    <div class="picbox">
+                        <div class="imgbox">
+                            <img src="{% static 'images/' %}{{ movie.image_link | safe }}" width="276" height="407">
+                        </div>
+                    </div>
+                </div>
+                <!-- right start -->
+                <div class="right">
+                    <div class="r_head">
+                        <h2>
+                            {{ movie.name }}
+                            <span>
+                                {% if movie.d_rate is None %}
+
+                                    {% else %}
+                                        ( {{ movie.d_rate}} 分 )
+                                    {% endif %}
+
+                            </span>
+                        </h2>
+                        <!--------------- 循环输出该电影所有的标签---------------->
+                        {% for tag in movie.tags.all %}
+                            <div class="otherbox">
+                                <span id="type">{{ tag.name }}</span>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <div class="r_info">
+                        <dl class="info_l">
+                            <dd>
+                                <strong>导演：</strong>
+                                <a href="#">{{ movie.director }}</a>
+                            </dd>
+                            <dd>
+                                <strong>国家地区：</strong>
+                                <a href="#">{{ movie.country }}</a>
+                            </dd>
+                            <dd>
+                                <strong>主演：</strong>
+                                <a href="#">{{ movie.leader }}</a>
+                            </dd>
+                            <dd>
+                                <strong>上映日期：</strong>
+                                <a href="#">{{ movie.years | safe }}</a>
+                            </dd>
+                            <dd>
+                                <strong>语言：</strong>
+                                <a href="#">{{ movie.language }}</a>
+                            </dd>
+                            <dd>
+                                <strong>标签：</strong>
+                                <a href="#">{{ movie.label }}</a>
+                            </dd>
+                            <dd>
+                                <strong>片长：</strong>
+                                <a href="#">{{ movie.long }} 分钟 </a>
+                            </dd>
+                            <dt>
+                                <h4>简介：</h4>
+                                <p>
+                                    {{ movie.intro }} ...
+                                </p>
+                            </dt>
+                        </dl>
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+                <!------------------- 操作区 ------------------>
+                <div class="rate_body">
+                    <div class="info_r">
+                        <div class="info_do">
+                            {% if user_rate is not None %}
+                                <button class="btn-score" >该视频您的评分为: {{ user_rate.mark }}分</button>
+                            {% else %}
+                                <span style="display: none;">{{ movie.id }}</span>
+                                <button class="btn-score1"> 评论</button>
+                            {% endif %}
+
+
+                            {% if is_collect %}
+                                <button class="btn-collect" onclick="delCollect({{ movie.id }});"> 取消收藏</button>
+                            {% else %}
+                                <button  onclick="collect({{ movie.id }});"> 点击收藏</button>
+                            {% endif %}
+
+
+                            <button class="btn-watch"> <a href="{{ movie.imdb_link }}">观看</a></button>
+                            <button class="btn-tupu"> <a href="http://localhost:7474/browser/">浏览图谱</a></button>
+                        </div>
+                    </div>
+                </div>
+                <!------------------- 评论区 ------------------>
+                <div class="comment_body">
+                    {% for row in rates %}
+                    <div class="comment_list">
+                        <p class="com_user">{{ row.user__account }}</p>
+                        <p class="com_time">{{ row.create_time | date:'Y-m-d H:i:s' }}</p>
+                        <p class="com_content">{{ row.comment }}</p>
+                    </div>
+                    {% endfor %}
+                    <div class="comment_bottom">
+                        <a href="{% url 'all_comment' movie.id%}">----- 查看全部评论 -----</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<div class="shadow hide" id="shadow"></div>
+<!-- 评分框 start -->
+<div class="modal_layer hide" id="modal_layer">
+    <div id="startone"  class="block clearfix" >
+        <div class="star_score"></div>
+        <p style="float:left;">您的评分：<span class="fenshu" id="fenshu"></span> 分</p>
+        <p style="display: none;" id="curCouNo"></p>
+        <div class="attitude"></div>
+    </div>
+     <!-- 评论 -->
+    <div style="margin-bottom: 5px;"><textarea rows="4" cols="58" style="padding: 5px;" id="comment" placeholder="请输入您的评论"></textarea></div>
+    <div><input type="button" value="提交评分" onclick="subScore();"></div>
+</div>
+<!-- 评分框  end -->
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/startScore.js' %}"></script>
+    <script type="text/javascript">
+    // 收藏功能
+    function collect(id) {
+        $.ajax({
+            url: '/collect/',
+            type: 'POST',
+            data: {'id': id,},
+            success: function (data) {
+                if (data == "ok") {
+                    location.reload();//刷新当前页面
+                    alert("收藏成功！");
+                } else {
+                    alert(data)
+                }
+            }
+        });
+    }
+    // 取消收藏
+    function delCollect(id) {
+        $.ajax({
+            url: '/collect/del/',
+            type: 'POST',
+            data: {'id': id,},
+            success: function (data) {
+                if (data == "ok") {
+                    location.reload();//刷新当前页面
+                    alert("取消成功！");
+                } else {
+                    alert(data)
+                }
+            }
+        });
+    }
+         $(function () {
+
+        // 评论功能
+        $('.btn-score1').click(function () {
+            var tds = $(this).prevAll();// 拿到点击收藏所在同级标签的值
+            var id = $(tds[0]).text();    //获取id
+
+            $('#curCouNo').text(id);
+
+            $('#shadow').removeClass('hide');
+            $('#modal_layer').removeClass('hide');
+
+
+        });
+
+
+        // 设置评分星星的样式
+        scoreFun($("#startone"))
+        scoreFun($("#starttwo"),{
+            fen_d:22,//每一个a的宽度
+            ScoreGrade:5//a的个数 10或者
+        });
+
+        $('#shadow').click(function () {
+            $('#shadow').addClass('hide');
+            $('#modal_layer').addClass('hide');
+        });
+
+
+    });
+
+
+    function subScore() {
+        var id = $('#curCouNo').text();
+        var fenshu = $('#fenshu').text();
+        var comment = $('#comment').val();
+
+
+        if (fenshu.length == 0 || comment.length == 0) {
+            alert('填写内容不能为空！');
+        }else {
+            $.ajax({
+                url: '/score/',
+                type: 'POST',
+                data: {'id': id,"score":fenshu,"comment":comment},
+                success: function (data) {
+                    if (data == "ok") {
+                        alert("操作成功！");
+                        location.reload();//刷新当前页面
+                    }else{
+                        alert(data)
+                    }
+                }
+            });
+        }
+
+    };
+    </script>
+{% endblock %}

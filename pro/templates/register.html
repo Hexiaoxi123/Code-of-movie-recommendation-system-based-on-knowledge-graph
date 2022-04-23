@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+    <title>Title</title>
+    <meta charset="utf-8"/>
+    <!-- 引入bootstrapCSS文件 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}"/>
+    <!-- 引入font-awesome文件 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}"/> <!-- 引入本页面外部样式CSS文件 -->
+
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="form-horizontal form-bg">
+                <span class="heading"><a href="">电影推荐系统</a> - 用户注册</span>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="请输入用户名" id="account">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="请输入密码" id="password">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="请确认密码" id="password1">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="请输入邮箱" id="email">
+                </div>
+                <div class="form-group">
+                    <span class=" text fa fa-mail-forward"> 已有账号？请<a href="{% url 'login' %}">直接登录！</a></span>
+                    <button type="submit" class="btn btn-default" onclick="register();">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    // 注册
+    function register() {
+        var account = $("#account").val();  // 获取账号的值
+        var password = $("#password").val();
+        var password1 = $("#password1").val();
+        var email = $("#email").val();
+
+        var rule=/^\w+@\w+(\.com)+(\.cn)?$/;  //邮箱判定的规则
+
+        if (account.length==0 || password.length==0 || password1.length==0|| email.length==0){
+            alert("请填写完整！");
+            return false;
+        }
+
+        if (password != password1){
+            alert("两次密码输入不一致！");
+            return false;
+        }
+        if (!rule.test(email)) {
+            alert("请输入正确的邮箱！");
+            return false;
+        }
+
+        $.ajax({
+             url:'/register/',
+             type:'POST',
+             data:{'account':account,'password':password,'email':email},
+             success:function (data) {
+                //当服务端处理完成后，返回数据时，该函数自动调用
+                //data=服务端返回的值
+                 if (data == "ok") {
+                     alert("注册成功！");
+                     location.reload();//刷新当前页面
+                 }else {
+                     alert("此用户已注册！");
+                 }
+
+             }
+         })
+    }
+</script>
+

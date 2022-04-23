@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}"/> <!-- 引入bootstrapCSS文件 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}"/> <!-- 本页面CSS文件 -->
+
+
+    <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.SuperSlide.2.1.1.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'plugins/echart/echarts.min.js' %}"></script> <!--  引入Echart文件  -->
+
+
+    {% block css %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img  src="{% static 'images/logo-footer.png' %}" width="20">
+            </a>
+            <a class="navbar-brand" href="#">电影推荐系统</a>
+        </div>
+        <p class="navbar-text navbar-right">
+            <a href="{% url 'admin_login' %}">
+                <i class="icon-font">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true">
+                    </span>
+                </i>退出系统
+            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </p>
+    </div>
+</nav>
+<div class="content">
+    <div class="sidebar-wrap">
+        <div class="sidebar-title">
+            <h1>
+                欢迎您，
+                 {% if request.session.user_info.identity %}
+                    {{ request.session.user_info.identity }}
+                {% endif %}
+            </h1>
+        </div>
+        <div class="sidebar-content">
+            <ul class="sidebar-list">
+                <li>
+                    <a href="#"><i class="icon-font"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></i>常用操作</a>
+                    <ul class="sub-menu">
+
+                        {% for row in request.session.menu_list %}
+
+                            <li {% if row.url ==  request.session.current_url %} class="on" {% endif %}>
+                                <a href="{{ row.url }}">
+                                    <i class="icon-font"><span class="{{ row.icon }}" aria-hidden="true"></span></i>
+                                    {{ row.title }}
+                                </a>
+                            </li>
+{#                            {% else %}#}
+{#                            <li>#}
+{#                                <a href="{{ row.url }}">#}
+{#                                    <i class="icon-font"><span class="{{ row.icon }}" aria-hidden="true"></span></i>#}
+{#                                    {{ row.title }}#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            {% endif %}#}
+                        {% endfor %}
+{#                        <li><a href="{% url '/admin/movie/' %}"><i class="icon-font"><span class="glyphicon glyphicon-film" aria-hidden="true"></span></i>电影管理</a></li>#}
+{#                        <li><a href="{% url '/admin/user/' %}"><i class="icon-font"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></i>用户管理</a></li>#}
+{#                        <li><a href="{% url '/admin/data/' %}"><i class="icon-font"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span></i>数据统计</a></li>#}
+{#                        <li><a href="{% url '/admin/role/' %}"><i class="icon-font"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span></i>角色管理</a></li>#}
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+</div>
+
+
+</body>
+</html>
+
+
+
+{% block js %}{% endblock %}

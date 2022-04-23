@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+        .main-content {
+            padding-top: 0;
+        }
+        .main-movies {
+            padding-top: 30px;
+        }
+        .title {
+            border-bottom: 6px solid #8552a1;
+            margin-bottom: 10px;
+            background-color: #3f4044;
+        }
+        .title h2 {
+            font-size: 35px;
+            color: #fff;
+            display: inline-block;
+            padding: 15px 0;
+            margin-left: 44%;
+            letter-spacing: 2px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block main-content %}
+    <!---------------- title 标题 ----------------->
+    <div class="title">
+        <h2>{{ title }}</h2>
+            <form method="post" action="{% url 'index' %}" class="form-inline"
+                  style="display:inline;float: right; margin-top: 50px; margin-right: 250px">
+                <!--{% csrf_token %}-->
+                <div class="form-group">
+                    <select onchange="this.form.submit()" name="order">
+                        <option value="rate" id="rate" disabled selected>评分排序</option>
+                        <option value="collect" id="collect">收藏排序</option>
+                        <option value="nums" id="nums">流量排序</option>
+                        <option value="years" id="years">时间排序</option>
+                    </select>
+                </div>
+            </form>
+
+    </div>
+    <!---------------- 电影列表 ----------------->
+    <div class="main-movies">
+        <div class="dy-content">
+            <div class="dy-videos">
+                <ul class="dy-video-list" >
+                    {% for row in movies %}
+                        <li class="dy-video-item ">
+                            <div class="dy-video-meta">
+                                <div class="dy-video-meta-bg"></div>
+                                <div class="dy-video-meta-dy">
+                                    <h4 class="dy-video-title"><a> {{ row.name }} </a></h4>
+{#                                    <span class="dy-video-rating">{{ row.d_rate }}</span>#}
+                                    <ul class="dy-video-meta-list">
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip"> 主演: </span>
+                                            <a>{{ row.leader }}</a>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">导演:</span>
+                                            <span class="dy-video-meta-filter">{{ row.director }}</span>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">标签:</span>
+                                            <span class="dy-video-meta-filter">{{ row.label}}</span>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">地区:</span>
+                                            <span class="dy-video-meta-filter">{{ row.country }}</span>
+                                        </li>
+                                        <li class="dy-video-actors">
+                                            <span class="dy-video-tip">语言:</span>
+                                            <span class="dy-video-meta-filter">{{ row.language }}</span>
+                                        </li>
+                                    </ul>
+                                    <p class="dy-video-intro">
+                                        <!-- 详情 --->
+                                        <a class="dy-video-intro-more" href="{% url 'detail' row.id%}">点击查看详情</a>
+                                    </p>
+                                </div>
+                                <div class="dy-video-meta-bg"></div>
+                            </div>
+                            <div class="dy-video-poster">
+                                <a class="dy-video-link">
+                                    <img class="dy-video-img"  src="{% static 'images/' %}{{ row.image_link | safe }}" >
+                                    <span  class="dy-video-nocomplete"></span>
+                                    <span class="dy-video-date"> {{ row.years | safe | slice:'4'}} 年 </span>
+                                    <span class="dy-video-bg"></span>
+                                    <span class="s-pay"></span>
+                                </a>
+                            </div>
+                            <div class="dy-video-primary">
+                                <h4 class="dy-video-title">
+                                    <a> {{ row.name }} </a>
+                                </h4>
+                                <span class="dy-video-rating">
+                                    {% if row.d_rate is None %}
+                                        暂无
+                                    {% else %}
+                                    {{ row.d_rate }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+         $('.menu ul').find('li').eq(0).addClass('active');
+
+         $('option').removeAttr('disabled').removeAttr('selected');
+         var title = "{{ title }}";
+         if (title === "流量排序") {
+             $('#nums').attr('disabled', true).attr('selected', true);
+         } else if (title === '收藏排序') {
+             $('#collect').attr('disabled', true).attr('selected', true);
+         } else if (title === '时间排序') {
+             $('#years').attr('disabled', true).attr('selected', true);
+         }
+    </script>
+{% endblock %}

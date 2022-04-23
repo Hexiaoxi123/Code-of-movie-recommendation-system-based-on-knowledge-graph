@@ -1,0 +1,146 @@
+{% extends 'adminLayout.html' %}
+{% load static %}
+
+{% block css %}
+    <style type="text/css">
+
+    /* ----------------------------------------------- */
+    .border {width: 90%;margin: 20px auto;border: 1px #ddd dotted;padding: 8px; height:55px;}
+    .txt{ border: 1px solid #ddd;outline: none;padding: 6px;width: 220px;}
+
+    .table-record {width: 90%;margin: 10px auto;height: 400px;overflow-y: auto;}
+
+    .shadow {position: fixed;top: 0;bottom: 0;left: 0;right: 0;background-color: black;opacity: 0.4;z-index: 999;}
+    .modal_del_layer {position: fixed;z-index: 1000;left: 50%;top: 50%;margin-top: -150px;margin-left: -200px;}
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="main-wrap">
+        <div class="crumb-wrap">
+            <div class="crumb-list">
+                <i class="icon-font"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></i>
+                <span class="crumb-name">角色管理</span>
+            </div>
+        </div>
+        <!--------------------- 搜索栏 ---------------------------->
+        <div class="border">
+
+            <a class="btn btn-danger" href="{% url 'admin_role_add' %}" style="float: right;display: inline-block;">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> 添加管理员
+            </a>
+
+        </div>
+        <!---------------------- 结果显示 --------------------------->
+        <div class="table-record">
+            <table class="table table-striped table-bordered table-hover" id="sample-table">
+                <thead>
+                <tr>
+                    <th>管理员编号</th>
+                    <th>账号</th>
+                    <th>密码</th>
+                    <th>身份</th>
+                    <th>创建时间</th>
+                    <th>拥有权限</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in user %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.account }}</td>
+                        <td>{{ row.password }}</td>
+                        <td>{{ row.identity }}</td>
+                        <td>{{ row.created_time | date:'Y-m-d'}}</td>
+                        <td>
+                            {% for col in row.permissions.all %}
+                                {{ col.title }};
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-warning delObj" title="删除">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <div class="shadow hide" id="shadow"></div>
+    <!-- 模态框  start -->
+    <div class="modal_del_layer hide" role="dialog" id="modal_del_layer">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close close_modal" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">确认删除编号<span id="del-id"></span>的信息 ?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default close_modal" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary del_obj">确认删除</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        //点击 删除时 出现弹框  对于未来事件，需要用delegate
+        $('#sample-table').delegate('.delObj', 'click', function () {
+            var tds = $(this).parent().prevAll();
+            $('#del-id').text($(tds[5]).text());
+            $('#shadow').removeClass('hide');
+            $('#modal_del_layer').removeClass('hide');
+
+
+        });
+
+        $(function () {
+
+            // 隐藏遮罩层  关闭弹框
+            $('#shadow,.close_modal').click(function () {
+                $('#shadow').addClass('hide');
+                $('#modal_del_layer').addClass('hide');
+            });
+
+
+            // 删除
+            $('.del_obj').on('click', function () {
+
+                var id = $('#del-id').text();
+
+                $.ajax({
+                    url: '/admin/role/del/',
+                    type: 'POST',
+                    data: {'id': id},
+                    success: function (data) {
+                        if (data == "ok") {
+                            alert("删除成功！");
+                            location.reload();//刷新当前页面
+                        } else {
+                            alert(data);
+                        }
+                    }
+                });
+            });
+
+
+        });
+
+
+
+    </script>
+
+{% endblock %}
